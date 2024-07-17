@@ -2,6 +2,8 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "ws";
 import router from "./routers/router";
+import cors from "cors";
+import { configDotenv } from "dotenv";
 
 const app = express();
 const server = createServer(app);
@@ -9,6 +11,9 @@ const wss = new Server({ server });
 
 app.use(express.json());
 app.use(router);
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+configDotenv();
 
 wss.on("connection", (ws) => {
   ws.on("message", (message) => {

@@ -4,6 +4,7 @@ import { hash } from "bcrypt";
 
 export default class UserService {
   private prisma: PrismaService;
+
   constructor() {
     this.prisma = new PrismaService();
   }
@@ -27,6 +28,29 @@ export default class UserService {
       },
     });
 
-    return newUser;
+    return {
+      ...newUser,
+      password: undefined,
+      roleId: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
+    };
+  }
+
+  async findEmail(email: string) {
+    const emailAlreadyExist = this.prisma.client.user.findUnique({
+      where: { email },
+    });
+
+    if (!emailAlreadyExist) {
+      throw new Error("Email not exist");
+    }
+
+    return {
+      ...emailAlreadyExist,
+      roleId: undefined,
+      createdAt: undefined,
+      updatedAt: undefined,
+    };
   }
 }
