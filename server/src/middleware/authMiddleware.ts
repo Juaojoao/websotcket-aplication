@@ -1,19 +1,29 @@
 import { Response, Request, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { User } from "../models/userModel/userModel";
 
-const authMiddleware = (res: Response, req: Request, next: NextFunction) => {
+export const authMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ error: "Token not Provided" });
+    return res.status(401).json({ error: "Token not provided" });
   }
 
-  jwt.verify(token, process.env.SECRET_KEY as string, (err, decoded: any) => {
+  const secretKey = process.env.JWT_SECRET;
+  if (!secretKey) {
+    return res.status(500).json({ error: "Secret key not configured" });
+  }
+
+  jwt.verify(token, secretKey, (err, decoded: any) => {
     if (err) {
-      return res.status(401).json({ error: "Inválid token" });
+      return res.status(401).json({ error: "Invalid token" });
     }
 
-    req.user = decoded.user;
+    req.user = decoded.user as User;
     next();
   });
 };
