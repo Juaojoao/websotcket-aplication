@@ -1,10 +1,16 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      flexBasis: {
+        '1/3-calc': 'calc(33.33% - 0.4rem)',
+        '1/2-calc': 'calc(50% - 0.4rem)',
+      },
+    },
   },
   plugins: [],
 }
