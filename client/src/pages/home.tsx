@@ -1,9 +1,11 @@
 import { ClockIcon } from "../assets/clock";
 import { CardProductCustom } from "../components/cardProducts/cardProduct";
+import { HeroCustom } from "../components/hero/hero";
 
 export const HomePage = () => {
   return (
     <>
+      <HeroCustom />
       <section className="w-full">
         <div className="campanha flex-col sm:flex-row font-extrabold text-lg flex justify-between px-5 py-3 items-center bg-orange-400">
           <div>

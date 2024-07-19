@@ -6,14 +6,7 @@ import { useState } from "react";
 export const HeaderCustom = () => {
   const [menuMob, setMenuMob] = useState(false);
   const handleClickMenu = () => setMenuMob(!menuMob);
-  const handleSelectedNav = (id: number) => {
-    if (id === selectedNav) return;
-    if (id) {
-      setSelectedNav(id);
-      setMenuMob(false);
-    }
-  };
-  const [selectedNav, setSelectedNav] = useState<number | null>(null);
+
   return (
     <header className="flex justify-around p-5 bg-blue-600 items-center shadow-lg relative">
       <div className="logo text-white">LOGO</div>
@@ -26,7 +19,7 @@ export const HeaderCustom = () => {
             <AvatarIcon />
             <ul className="dropdown text-base bg-blue-50 drop-shadow-md px-6 py-3 mt-4">
               <li>
-                <a href="#">Entrar</a>
+                <a href="/login">Entrar</a>
               </li>
               <li>
                 <a href="#">Registrar</a>
