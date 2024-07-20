@@ -4,11 +4,13 @@ import { User } from "../models/userModel";
 interface AuthState {
   user: User | null;
   token: string | null;
+  loged?: boolean;
 }
 
 const initialState: AuthState = {
   user: null,
   token: localStorage.getItem("auth") || null,
+  loged: false,
 };
 
 const authSlice = createSlice({
@@ -20,14 +22,16 @@ const authSlice = createSlice({
 
       state.user = action.payload.user;
       state.token = action.payload.token;
+      state.loged = true;
 
-      localStorage.setItem("auth", action.payload.token);
+      localStorage.setItem("token", action.payload.token);
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
+      state.loged = false;
 
-      localStorage.removeItem("auth");
+      localStorage.removeItem("token");
     },
   },
 });

@@ -1,8 +1,26 @@
-.show-dropdown {
-  display: block;
+.show-drop {
   position: relative;
+  display: inline-block;
 }
 
 .dropdown {
   position: absolute;
+  top: 100%;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  transition: width 0.5s, height 0.5s;
+  background-color: #fff;
+}
+
+.dropdown.active {
+  width: 150px;
+  height: auto;
+  transition: width 0.5s, height 0.5s;
+  padding: 1rem;
+}
+
+ul li {
+  cursor: pointer;
 }

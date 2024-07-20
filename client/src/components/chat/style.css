@@ -1,0 +1,6 @@
+button.button-chat + .content-chat.active {
+  width: 400px;
+  height: 600px;
+  overflow: auto;
+  border-width: 2px;
+}

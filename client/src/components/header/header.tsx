@@ -1,11 +1,34 @@
 import "./index.css";
 import { AvatarIcon } from "../../assets/avatar";
 import { CartIcon } from "../../assets/cartIcon";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { logout } from "../../features/authSlice";
+import { useClickAway } from "react-use";
 
 export const HeaderCustom = () => {
+  const [openDropDown, setOpenDropDown] = useState(false);
   const [menuMob, setMenuMob] = useState(false);
+
+  const { loged } = useSelector((state: RootState) => state.auth);
+
   const handleClickMenu = () => setMenuMob(!menuMob);
+
+  const dropDownRef = useRef<HTMLUListElement>(null);
+  const dispatch = useDispatch();
+
+  const logoutUser = () => {
+    dispatch(logout());
+  };
+
+  const handleOpenDropDown = () => {
+    setOpenDropDown(!openDropDown);
+  };
+
+  useClickAway(dropDownRef, () => {
+    setOpenDropDown(false);
+  });
 
   return (
     <header className="flex justify-around p-5 bg-blue-600 items-center shadow-lg relative">
@@ -15,18 +38,35 @@ export const HeaderCustom = () => {
           <li>
             <CartIcon fillIcon="#fff" />
           </li>
-          <li className="show-drop">
+          <li className="show-drop" onClick={handleOpenDropDown}>
             <AvatarIcon />
-            <ul className="dropdown text-base bg-blue-50 drop-shadow-md px-6 py-3 mt-4">
-              <li>
-                <a href="/login">Entrar</a>
-              </li>
-              <li>
-                <a href="#">Registrar</a>
-              </li>
-              <li>
-                <a href="#">Perfil</a>
-              </li>
+            <ul
+              ref={dropDownRef}
+              className={`dropdown ${
+                openDropDown ? "active" : ""
+              } text-base bg-blue-50 drop-shadow-md mt-4 justify-center items-center flex flex-col gap-2`}
+            >
+              {loged ? (
+                <>
+                  <li>
+                    <a href="#" onClick={logoutUser}>
+                      Sair
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/perfil">Perfil</a>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <a href="/login">Entrar</a>
+                  </li>
+                  <li>
+                    <a href="/register">Registrar</a>
+                  </li>
+                </>
+              )}
             </ul>
           </li>
         </ul>

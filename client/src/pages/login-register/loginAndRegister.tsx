@@ -2,12 +2,15 @@ import { InputCustom } from "../../components/inputs/input";
 import { ButtonCustom } from "../../components/buttons/button";
 import { ChangeEvent, useState } from "react";
 import { login } from "../../api/request/auth";
+import { useAuth } from "../../context/authContext";
 
 export const LoginPage = () => {
   const [inputFields, setInputFields] = useState({
     email: "",
     password: "",
   });
+
+  const { setAuth } = useAuth();
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -16,7 +19,10 @@ export const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await login(inputFields.email, inputFields.password);
+    const response = await login(inputFields.email, inputFields.password);
+    if (response.status === 200) {
+      setAuth(response.token);
+    }
   };
 
   return (

@@ -12,6 +12,8 @@ const login = async (email: string, password: string) => {
     const response: login = (
       await api.post("/user/auth/login", { email, password })
     ).data;
+    console.log(response);
+
     return response;
   } catch (error: any) {
     console.log(error.response.data);
