@@ -1,0 +1,14 @@
+.card-alert.success {
+  border: 2px solid #4caf50;
+  color: #4caf50;
+}
+
+.card-alert.error {
+  border: 2px solid red;
+  color: red;
+}
+
+.card-alert.warning {
+  border: 2px solid #ff9800;
+  color: #ff9800;
+}
