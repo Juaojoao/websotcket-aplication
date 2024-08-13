@@ -15,7 +15,7 @@ export default class UserService {
     });
 
     if (userAlreadyExists) {
-      throw new Error("User already exists");
+      throw new Error("Usuário já existente");
     }
     const hashedPassword = await hash(data.password, 10);
 
@@ -24,7 +24,7 @@ export default class UserService {
         username: data.username,
         email: data.email,
         password: hashedPassword,
-        role: { connect: { id: data.role } },
+        role: { connect: { id: 1 } },
       },
     });
 
@@ -43,7 +43,7 @@ export default class UserService {
     });
 
     if (!emailAlreadyExist) {
-      throw new Error("Email not exist");
+      throw new Error("Este Email não existe!");
     }
 
     return {
