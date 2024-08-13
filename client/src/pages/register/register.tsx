@@ -6,6 +6,7 @@ import { createUser, userRequest } from "../../api/request/userRequest";
 import { FaUserCircle } from "react-icons/fa";
 import { z } from "zod";
 import { useAlert } from "../../context/alertContext";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = z
   .object({
@@ -29,6 +30,8 @@ const registerSchema = z
 
 export const RegisterPage = () => {
   const alert = useAlert();
+  const navigate = useNavigate();
+
   const [inputFields, setInputFields] = useState({
     username: "",
     email: "",
@@ -47,12 +50,7 @@ export const RegisterPage = () => {
     const result = registerSchema.safeParse(inputFields);
 
     if (!result.success) {
-      // Concatena todas as mensagens de erro em uma única string
-      const errorMessage = result.error.errors
-        .map((error) => error.message)
-        .join(" ");
-
-      // Exibe o alerta com a mensagem de erro
+      const errorMessage = result.error.errors[0].message;
       alert.showAlert(errorMessage, "warning");
       return;
     }
@@ -64,9 +62,17 @@ export const RegisterPage = () => {
       password: inputFields.password,
     });
 
-    if (response.success) {
-      console.log(response.message);
-    }
+    if (!response?.success) return alert.showAlert(response.error, "error");
+
+    alert.showAlert(response.message, "success");
+    setInputFields({
+      username: "",
+      email: "",
+      password: "",
+      repeatPassword: "",
+    });
+
+    navigate("/login");
   };
 
   return (
@@ -95,8 +101,8 @@ export const RegisterPage = () => {
 
         <Form.FormLabel icon={RiLockPasswordFill}>
           <Form.InputCustom
-            id="senha"
-            name="senha"
+            id="password"
+            name="password"
             type="password"
             onChange={handleChangeInput}
             placeholder="Senha"

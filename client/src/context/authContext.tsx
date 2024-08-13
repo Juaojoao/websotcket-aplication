@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { User } from "../models/userModel";
 import { logout, setCredentials } from "../features/authSlice";
 import { RootState } from "../redux/store";
-import { JwtPayload, jwtDecode } from "jwt-decode"; // Import the jwtDecode function and JwtPayload type
+import { JwtPayload, jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
@@ -16,6 +16,11 @@ interface AuthContextType {
 interface AuthProviderProps {
   children: ReactNode;
 }
+
+interface JwtUser extends JwtPayload {
+  user?: User;
+}
+
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
 );
@@ -27,7 +32,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const navigate = useNavigate();
 
   const decodedToken = (token: string) => {
-    return jwtDecode<JwtPayload>(token);
+    return jwtDecode<JwtUser>(token);
   };
 
   useEffect(() => {

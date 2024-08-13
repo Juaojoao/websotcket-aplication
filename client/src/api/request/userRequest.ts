@@ -6,6 +6,7 @@ export interface userRequest {
   status: number;
   success: boolean;
   token: string;
+  error: string;
 }
 
 const login = async (email: string, password: string) => {
@@ -16,8 +17,7 @@ const login = async (email: string, password: string) => {
 
     return response;
   } catch (error: any) {
-    console.log(error.response.data);
-    return error.response.data.message;
+    return error.response.data;
   }
 };
 
@@ -25,7 +25,7 @@ const createUser = async (data: User) => {
   const { username, email, password } = data;
   try {
     const response: userRequest = (
-      await api.post("user/creater-user", {
+      await api.post("/user/create-user", {
         username,
         email,
         password,
@@ -34,8 +34,7 @@ const createUser = async (data: User) => {
 
     return response;
   } catch (error: any) {
-    console.log(error.response.data);
-    return error.response.data.message;
+    return error.response.data;
   }
 };
 

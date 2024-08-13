@@ -22,7 +22,7 @@ export const AlertProvider = ({ children }: AlertProps) => {
     type: "success" | "error" | "warning"
   ) => {
     setAlert({ message, type });
-    setTimeout(() => setAlert(null), 10000000);
+    setTimeout(() => setAlert(null), 5000);
   };
 
   return (

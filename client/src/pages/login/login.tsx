@@ -1,9 +1,17 @@
 import { ChangeEvent, useState } from "react";
-import { login } from "../../api/request/userRequest";
+import { login, userRequest } from "../../api/request/userRequest";
 import { useAuth } from "../../context/authContext";
 import { Form } from "../../components/form/form";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { MdEmail } from "react-icons/md";
+import { z } from "zod";
+import { useAlert } from "../../context/alertContext";
+import { useNavigate } from "react-router-dom";
+
+const loginSchema = z.object({
+  email: z.string().email("Email inválido"),
+  password: z.string().min(6, "Tamanho mínimo 6 caracters"),
+});
 
 export const LoginPage = () => {
   const [inputFields, setInputFields] = useState({
@@ -11,7 +19,9 @@ export const LoginPage = () => {
     password: "",
   });
 
+  const navigate = useNavigate();
   const { setAuth } = useAuth();
+  const alert = useAlert();
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,10 +30,28 @@ export const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await login(inputFields.email, inputFields.password);
-    if (response.status === 200) {
-      setAuth(response.token);
+
+    const result = loginSchema.safeParse(inputFields);
+
+    if (!result.success) {
+      const errorMessage = result.error.errors[0].message;
+      alert.showAlert(errorMessage, "warning");
     }
+
+    const response: userRequest = await login(
+      inputFields.email,
+      inputFields.password
+    );
+
+    if (!response.status) {
+      console.log("false");
+    }
+
+    setAuth(response?.token);
+    alert.showAlert(response.message, "success");
+    setInputFields({ email: "", password: "" });
+
+    navigate("/");
   };
 
   return (
